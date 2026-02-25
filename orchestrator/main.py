@@ -75,7 +75,6 @@ def process_task(task: dict) -> bool:
         db.update_task(
             task_id,
             plan=json.dumps(plan, indent=2),
-            estimated_complexity=plan.get("complexity", "unknown"),
         )
         task["agent_log"] = _append_log(task, {
             "agent": "planner",
