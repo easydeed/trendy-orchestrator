@@ -4,16 +4,16 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    # Anthropic
-    anthropic_api_key: str
+    # Anthropic (only needed by worker)
+    anthropic_api_key: str = ""
     claude_model: str = "claude-sonnet-4-20250514"
 
     # Database (same as TrendyReports)
     database_url: str
 
-    # GitHub
-    github_token: str
-    github_repo: str  # "owner/repo"
+    # GitHub (only needed by worker)
+    github_token: str = ""
+    github_repo: str = ""  # "owner/repo"
     github_default_branch: str = "main"
 
     # Orchestrator behavior
