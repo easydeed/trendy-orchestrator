@@ -27,6 +27,7 @@ from orchestrator.github_client import (
     create_pull_request,
     delete_file,
 )
+from orchestrator.inbox import check_inbox
 from orchestrator.settings import settings
 
 logging.basicConfig(
@@ -360,6 +361,14 @@ def main():
 
     while True:
         try:
+            # Check GitHub inbox for tasks committed by Claude
+            try:
+                inbox_count = check_inbox()
+                if inbox_count:
+                    logger.info(f"Loaded {inbox_count} tasks from GitHub inbox")
+            except Exception as e:
+                logger.warning(f"Inbox check error (non-fatal): {e}")
+
             task_processed = run_once()
             if task_processed:
                 # Immediately check for more work

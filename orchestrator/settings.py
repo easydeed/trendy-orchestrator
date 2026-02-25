@@ -13,7 +13,8 @@ class Settings(BaseSettings):
 
     # GitHub (only needed by worker)
     github_token: str = ""
-    github_repo: str = ""  # "owner/repo"
+    github_repo: str = ""  # "owner/repo" — the TrendyReports codebase
+    github_orchestrator_repo: str = "easydeed/trendy-orchestrator"  # where inbox.json lives
     github_default_branch: str = "main"
 
     # Orchestrator behavior
