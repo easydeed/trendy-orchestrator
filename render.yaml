@@ -1,22 +1,22 @@
 # render.yaml — Blueprint for deploying on Render
-# Add this as a new Background Worker in your Render dashboard
+# Two services: intake (web) + orchestrator (background worker)
 
 services:
   # The orchestrator (polls for tasks, runs agent pipeline)
   - type: worker
-    name: trendy-orchestrator
+    name: trendy-agent-worker
     runtime: python
-    buildCommand: pip install poetry && poetry install --no-root
+    buildCommand: pip install anthropic "psycopg[binary]" httpx PyGithub pydantic-settings
     startCommand: python -m orchestrator.main
     envVars:
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: DATABASE_URL
-        sync: false  # Use the same DATABASE_URL as your API service
+        sync: false
       - key: GITHUB_TOKEN
         sync: false
       - key: GITHUB_REPO
-        value: your-username/reportscompany
+        value: easydeed/market-reports
       - key: GITHUB_DEFAULT_BRANCH
         value: main
       - key: INTAKE_SECRET
@@ -32,9 +32,9 @@ services:
 
   # The intake server (HTTP API for submitting tasks from your phone)
   - type: web
-    name: trendy-intake
+    name: trendy-agent-intake
     runtime: python
-    buildCommand: pip install poetry && poetry install --no-root
+    buildCommand: pip install anthropic "psycopg[binary]" httpx PyGithub pydantic-settings
     startCommand: python -m orchestrator.intake_server
     envVars:
       - key: DATABASE_URL
